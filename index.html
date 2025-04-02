@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search and Favorites</title>
+    <style>
+        /* General Styling for Body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Centering the Search Bar and Buttons */
+        .mid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        /* Styling for Input Field */
+        input {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            width: 250px;
+        }
+
+        /* Styling for Search and Favourite Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Grid Layout for Movie Cards */
+        .movie {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));  /* Responsive grid */
+            gap: 20px;
+            padding: 20px;
+            justify-items: center;
+        }
+
+        /* Movie Card Styling */
+        .card {
+            position: relative;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            height: 370px;
+            max-width: 300px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Movie Card Hover Effect */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Movie Poster Styling */
+        .img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Movie Title Styling */
+        h1 {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px;
+            color: #333;
+        }
+
+        /* Movie Description Styling (Ellipsis for Overflow) */
+        .desc {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3; /* Limit to 3 lines */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #555;
+            padding: 0 15px;
+            font-size: 14px;
+        }
+
+        /* Add Favourite Button */
+        .addfav {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 16px;
+            border-radius: 5px;
+            background-color: #ff6347;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Add Favourite Button Hover Effect */
+        .addfav:hover {
+            background-color: #e53e30;
+        }
+
+        /* Button Disabled State */
+        .addfav:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .mid {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            input {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .movie {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                padding: 10px;
+            }
+
+            .card {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mid {
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 12px;
+                font-size: 18px;
+            }
+
+            .movie {
+                grid-template-columns: 1fr;
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mid">
+        <div><input type="text" placeholder="Search"></div>
+        <div><button onclick="getdata()" class="btn">Search</button></div>
+        <div><button onclick="getfav()" class="btn">Favourite</button></div>
+    </div>
+
+    <div class="movie"></div>
+
+    <script>
+        window.onload = function () {
+            loadMovies();
+        }
+
+        async function loadMovies() {
+            const url = "https://api.themoviedb.org/3/discover/movie?api_key=ddeca81f67305f5686739cf664771cc8";
+            const response = await fetch(url);
+            const val = await response.json();
+            const array = val.results;
+
+            displayMovies(array);
+        }
+
+        function displayMovies(array, isfav) {
+            document.querySelector(".movie").innerHTML = "";
+
+            array.forEach(ele => {
+                const card = document.createElement("div");
+                card.classList.add("card");
+                const btn = document.createElement("button");
+                btn.classList.add("addfav");
+                if (!isfav) {
+                    btn.innerText = "Add Favourite";
+                }
+                else {
+                    btn.innerText = "Delete Favourite";
+                }
+
+                const image = document.createElement("img");
+                const title = document.createElement("h1");
+                const des = document.createElement("p");
+                des.classList.add("desc");
+
+                image.src = "https://image.tmdb.org/t/p/w500/" + ele.poster_path;
+                image.classList.add("img");
+
+                title.innerText = ele.original_title;
+                des.innerText = ele.overview;
+
+                btn.addEventListener("click", async function () {
+                    if (!isfav)
+                        await addfav(ele.id, true);
+                    else
+                        await addfav(ele.id, false)
+                });
+
+                card.appendChild(image);
+                card.appendChild(title);
+                card.appendChild(des);
+                card.appendChild(btn);
+
+                document.querySelector(".movie").appendChild(card);
+            });
+        }
+
+        async function getdata() {
+            const inputValue = document.querySelector("input").value;
+            document.querySelector("input").value="";
+            const options = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZGVjYTgxZjY3MzA1ZjU2ODY3MzljZjY2NDc3MWNjOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9._DYi_W2E5V6nefOrfsZboxtmLsFjBFKlxCs8UVF-jWo'
+                }
+            };
+
+            const url = `https://api.themoviedb.org/3/search/movie?query=${inputValue}&api_key=ddeca81f67305f5686739cf664771cc8`;
+            const response = await fetch(url);
+            const val = await response.json();
+            const array = val.results;
+
+            const filteredArray = array.filter(ele => ele.original_title.toLowerCase().includes(inputValue.toLowerCase()));
+
+            displayMovies(filteredArray, false);
+        }
+
+        async function addfav(id, isremove) {
+            const options = {
+                method: 'POST',
+                headers: {
+                    accept: "application/json",
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZGVjYTgxZjY3MzA1ZjU2ODY3MzljZjY2NDc3MWNjOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9._DYi_W2E5V6nefOrfsZboxtmLsFjBFKlxCs8UVF-jWo',
+                    accept: 'application/json',
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    media_type: 'movie',
+                    media_id: id,
+                    favorite: isremove
+                })
+           
+            };
+
+const res = await fetch(`https://api.themoviedb.org/3/account/21916125/favorite?`, options);
+
+if (isremove)
+    alert("Added to favrouite");
+else {
+    alert("Removed")
+    getfav()
+}
+}
+
+
+async function getfav() {
+const options = {
+    method: 'GET',
+    headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZGVjYTgxZjY3MzA1ZjU2ODY3MzljZjY2NDc3MWNjOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9._DYi_W2E5V6nefOrfsZboxtmLsFjBFKlxCs8UVF-jWo'
+    }
+};
+const resp = await fetch('https://api.themoviedb.org/3/account/21916125/favorite/movies?language=en-US&page=1&sort_by=created_at.asc', options);
+const data = await resp.json();
+const array = data.results;
+
+displayMovies(array, true);
+}
+
+</script>
+</body>
+
+</html>
