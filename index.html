@@ -186,7 +186,7 @@
         }
 
         async function loadMovies() {
-            const url = "https://api.themoviedb.org/3/discover/movie?api_key=ddeca81f67305f5686739cf664771cc8";
+            const url = "https://api.themoviedb.org/3/discover/movie?api_key=6b12831836bf9a46e2f8dd9321a822f8";
             const response = await fetch(url);
             const val = await response.json();
             const array = val.results;
@@ -243,11 +243,11 @@
                 method: 'GET',
                 headers: {
                     accept: 'application/json',
-                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZGVjYTgxZjY3MzA1ZjU2ODY3MzljZjY2NDc3MWNjOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9._DYi_W2E5V6nefOrfsZboxtmLsFjBFKlxCs8UVF-jWo'
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YjEyODMxODM2YmY5YTQ2ZTJmOGRkOTMyMWE4MjJmOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.021MDxrw7rgVapf---1tXpmbafXG3yUGEZxW5tW7Vvw'
                 }
             };
 
-            const url = `https://api.themoviedb.org/3/search/movie?query=${inputValue}&api_key=ddeca81f67305f5686739cf664771cc8`;
+            const url = `https://api.themoviedb.org/3/search/movie?query=${inputValue}&api_key=6b12831836bf9a46e2f8dd9321a822f8`;
             const response = await fetch(url);
             const val = await response.json();
             const array = val.results;
@@ -262,7 +262,7 @@
                 method: 'POST',
                 headers: {
                     accept: "application/json",
-                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZGVjYTgxZjY3MzA1ZjU2ODY3MzljZjY2NDc3MWNjOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9._DYi_W2E5V6nefOrfsZboxtmLsFjBFKlxCs8UVF-jWo',
+                    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YjEyODMxODM2YmY5YTQ2ZTJmOGRkOTMyMWE4MjJmOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.021MDxrw7rgVapf---1tXpmbafXG3yUGEZxW5tW7Vvw',
                     accept: 'application/json',
                     'content-type': 'application/json'
                 },
@@ -290,7 +290,7 @@ const options = {
     method: 'GET',
     headers: {
         accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkZGVjYTgxZjY3MzA1ZjU2ODY3MzljZjY2NDc3MWNjOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9._DYi_W2E5V6nefOrfsZboxtmLsFjBFKlxCs8UVF-jWo'
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2YjEyODMxODM2YmY5YTQ2ZTJmOGRkOTMyMWE4MjJmOCIsIm5iZiI6MTc0MzM1NzMwNy4yNCwic3ViIjoiNjdlOTg1N2I0Zjc0MWM3NWJiYzZiMGZkIiwic2NvcGVzIjpbImFwaV9yZWFkIl0sInZlcnNpb24iOjF9.021MDxrw7rgVapf---1tXpmbafXG3yUGEZxW5tW7Vvw'
     }
 };
 const resp = await fetch('https://api.themoviedb.org/3/account/21916125/favorite/movies?language=en-US&page=1&sort_by=created_at.asc', options);
